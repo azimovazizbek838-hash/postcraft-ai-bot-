@@ -62,3 +62,26 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+# Til menyusini yaratish (Inline Buttons)
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+def get_language_keyboard():
+    markup = InlineKeyboardMarkup(row_width=2)
+    markup.add(
+        InlineKeyboardButton("🇺🇿 O'zbekcha", callback_data="lang_uz"),
+        InlineKeyboardButton("🇬🇧 English", callback_data="lang_en"),
+        InlineKeyboardButton("🇷🇺 Русский", callback_data="lang_ru"),
+        InlineKeyboardButton("🇹🇷 Türkçe", callback_data="lang_tr"),
+        InlineKeyboardButton("🇪🇸 Español", callback_data="lang_es"),
+        InlineKeyboardButton("🇸🇦 العربية", callback_data="lang_ar")
+    )
+    return markup
+
+# /start bosilganda
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    text = (
+        "👋 Welcome to Postcraft AI!\n"
+        "Iltimos, muloqot tilini tanlang / Please select your language:"
+    )
+    bot.send_message(message.chat.id, text, reply_markup=get_language_keyboard())
