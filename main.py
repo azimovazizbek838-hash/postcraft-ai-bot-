@@ -85,3 +85,20 @@ def send_welcome(message):
         "Iltimos, muloqot tilini tanlang / Please select your language:"
     )
     bot.send_message(message.chat.id, text, reply_markup=get_language_keyboard())
+import os
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import threading
+
+# Render port talabini qondirish uchun soxta server
+class DummyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+
+def run_dummy_server():
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(("0.0.0.0", port), DummyHandler)
+    server.serve_forever()
+
+# Serverni fonda (thread) yoqish
+threading.Thread(target=run_dummy_server, daemon=True).start()
